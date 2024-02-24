@@ -30,6 +30,4 @@ export type CommentType = {
   updatedAt: Date;
   UserId: number;
   PostId: number;
-  User: Pick<UserType, 'name' | 'username' | 'email'>;
-  Post: PostType;
 };

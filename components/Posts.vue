@@ -31,7 +31,7 @@ onMounted(async () => {
 
     <div v-else>
       <div v-for="post in allPosts" :key="post.id" class="m-4">
-        <div class="flex flex-col gap-6 mx-auto max-w-[1200px]">
+        <div class="flex flex-col gap-6">
           <Post :post="post" />
         </div>
       </div>
