@@ -7,15 +7,18 @@ const post = ref<PostType | null>(null);
 const comments = ref<CommentType[]>([]);
 const users = ref<{ [key: number]: UserType }>({});
 const postUser = ref<UserType | null>(null);
+const modalUid = ref<number | null>(null);
 const route = useRoute();
 const showModal = ref(false);
 
-const openModal = () => {
+const openModal = (uid: number) => {
   showModal.value = true;
+  modalUid.value = uid;
 };
 
 const closeModal = () => {
   showModal.value = false;
+  modalUid.value = null;
 };
 
 const updateRecentPosts = (postId: number) => {
@@ -78,8 +81,11 @@ onMounted(async () => {
 <template>
   <div class="max-w-[880px] mx-auto">
     <div v-if="post">
-      <Modal :user="postUser" :showModal="showModal" :closeModal="closeModal" />
-
+      <Modal
+        :userId="modalUid"
+        :showModal="showModal"
+        :closeModal="closeModal"
+      />
       <div class="my-10">
         <p class="text-center mb-4 text-xl text-gray-300">
           {{ formatDate(post.createdAt) }}
@@ -104,8 +110,8 @@ onMounted(async () => {
 
         <div class="mt-4 text-gray-200">
           <p
-            class="text-right text-lg text-blue-500 cursor-pointer"
-            @click="openModal"
+            class="text-right text-lg text-blue-500 cursor-pointer hover:opacity-65"
+            @click="openModal(post?.UserId)"
           >
             userId: {{ post?.UserId }}
           </p>
@@ -122,11 +128,18 @@ onMounted(async () => {
       </div>
       <hr class="border-1 my-10 border-slate-400" />
       <div class="mt-10 text-gray-200">
-        <h2 class="text-2xl">댓글:</h2>
+        <h2 class="text-2xl">댓글: {{ comments.length }}</h2>
         <ul>
-          <li v-for="comment in comments" :key="comment.id" class="mt-2">
+          <li
+            v-for="comment in comments"
+            :key="comment.id"
+            class="mt-6 pb-2"
+            @click="openModal(comment.UserId)"
+          >
+            <p class="pb-2 cursor-pointer hover:text-teal-300">
+              작성자: {{ users[comment.UserId]?.name }}
+            </p>
             <p>{{ comment.content }}</p>
-            <p>User Name: {{ users[comment.UserId]?.name }}</p>
           </li>
         </ul>
       </div>
