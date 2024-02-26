@@ -22,15 +22,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <div v-if="isLoading" class="mt-10 mx-4">
+  <div class="w-[calc(100%_-_100px)] mx-auto">
+    <div v-if="isLoading" class="mt-10">
       <div class="skeleton-box" v-for="n in 100" :key="n">
         <div class="skeleton"></div>
       </div>
     </div>
 
     <div v-else>
-      <div v-for="post in allPosts" :key="post.id" class="m-4">
+      <h2 class="my-10 text-3xl font-bold">Posts</h2>
+      <div v-for="post in allPosts" :key="post.id" class="my-2">
         <div class="flex flex-col gap-6">
           <Post :post="post" />
         </div>

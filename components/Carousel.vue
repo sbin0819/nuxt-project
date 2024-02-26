@@ -1,6 +1,5 @@
 <template>
-  <div class="mx-2">
-    <h1 class="m-4 text-2xl font-bold">최근에 본 글</h1>
+  <div class="my-10">
     <div v-if="isLoadingRecentPosts" class="mx-4">
       <div class="flex overflow-x-scroll scrollbar-hide">
         <div class="flex-none m-2 skeleton-card skeleton w-full"></div>
@@ -12,7 +11,7 @@
         class="flex items-center justify-center relative overflow-hidden"
       >
         <button
-          class="absolute left-0 z-10 bg-gray-800 bg-opacity-50 text-white hover:bg-opacity-70 flex items-center justify-center disabled:opacity-50"
+          class="absolute left-0 z-10 cursor-pointer bg-gray-500 bg-opacity-80 text-white hover:bg-opacity-100 flex items-center justify-center disabled:opacity-50"
           style="
             width: 40px;
             height: 40px;
@@ -27,7 +26,7 @@
         </button>
         <div
           ref="carouselRef"
-          class="flex overflow-x-scroll scrollbar-hide scroll-smooth"
+          class="flex overflow-x-scroll scrollbar-hide scroll-smooth border border-teal-300 overflow-hidden shadow-lg rounded-xl hover:bg-teal-500 transition-all duration-300 ease-in-out"
           style="white-space: nowrap; width: calc(100% - 100px)"
           @scroll="updateScrollButtons"
         >
@@ -41,7 +40,7 @@
           </div>
         </div>
         <button
-          class="absolute right-0 z-10 bg-gray-800 bg-opacity-50 text-white hover:bg-opacity-70 flex items-center justify-center disabled:opacity-50"
+          class="absolute right-0 z-10 cursor-pointer bg-gray-500 bg-opacity-80 text-white hover:bg-opacity-100 flex items-center justify-center disabled:opacity-50"
           style="
             width: 40px;
             height: 40px;
@@ -140,8 +139,9 @@ const scrollRight = () => {
 }
 
 .skeleton-card {
-  height: 180px;
-  width: 100%;
+  height: 200px;
+  width: calc(100% - 100px);
+  margin-inline: auto;
 }
 
 @keyframes shimmer {
