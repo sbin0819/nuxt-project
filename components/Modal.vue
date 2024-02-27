@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, onMounted, ref } from 'vue';
+import { watch, onMounted, onUnmounted, ref } from 'vue';
 import type { UserType } from 'types';
 
 const props = defineProps<{
@@ -9,17 +9,48 @@ const props = defineProps<{
 }>();
 
 const user = ref<UserType | null>(null);
-const showPopup = ref(false);
+const router = useRouter();
+const route = useRoute();
 
 const fetchUserData = async (userId: number) => {
   try {
     const res = await fetch(`https://koreanjson.com/users/${userId}`);
     user.value = await res.json();
-  } catch (error) {
-    console.error('Failed to fetch user data:', error);
+  } catch (e) {
+    console.error(e);
     user.value = null;
   }
 };
+
+watch(
+  () => props.showModal,
+  (newVal) => {
+    if (newVal) {
+      history.pushState({ modal: true }, '');
+    }
+  },
+);
+
+const closeModalAndPopState = () => {
+  props.closeModal();
+  if (history.state?.modal) {
+    history.back();
+  }
+};
+
+const handlePopstate = (event: PopStateEvent) => {
+  if (props.showModal) {
+    closeModalAndPopState();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('popstate', handlePopstate);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('popstate', handlePopstate);
+});
 
 watch(
   () => props.userId,
@@ -31,18 +62,9 @@ watch(
   { immediate: true },
 );
 
-onBeforeRouteLeave((to, from, next) => {
-  if (showPopup.value) {
-    next(false);
-    showPopup.value = false;
-  } else {
-    next();
-  }
-});
-
 const onBackdropClick = (event: MouseEvent) => {
   if (event.target === event.currentTarget) {
-    props.closeModal();
+    closeModalAndPopState();
   }
 };
 </script>
@@ -54,7 +76,7 @@ const onBackdropClick = (event: MouseEvent) => {
     @click="onBackdropClick"
   >
     <div
-      class="bg-white px-4 pt-2 pb-4 rounded-md max-w-md w-full text-black shadow-xl shadow-teal-400"
+      class="mx-2 bg-white px-4 pt-2 pb-4 rounded-md max-w-md w-full text-black shadow-xl shadow-teal-400"
       @click.stop
     >
       <div class="flex justify-between items-center mb-4">

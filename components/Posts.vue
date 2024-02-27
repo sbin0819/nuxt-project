@@ -7,14 +7,14 @@ const isLoading = ref(true);
 onMounted(async () => {
   isLoading.value = true;
   try {
-    const response = await fetch('https://koreanjson.com/posts');
-    if (response.ok) {
-      allPosts.value = await response.json();
+    const res = await fetch('https://koreanjson.com/posts');
+    if (res.ok) {
+      allPosts.value = await res.json();
     } else {
       throw new Error('Failed to fetch all posts');
     }
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
   } finally {
     isLoading.value = false;
   }
