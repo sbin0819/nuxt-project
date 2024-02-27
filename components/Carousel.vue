@@ -1,6 +1,6 @@
 <template>
   <div class="my-10">
-    <div v-if="isLoadingRecentPosts" class="mx-4">
+    <div v-if="isLoadingRecentPosts">
       <div class="flex overflow-x-scroll scrollbar-hide">
         <div class="flex-none m-2 skeleton-card skeleton w-full"></div>
       </div>
