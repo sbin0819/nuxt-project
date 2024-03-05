@@ -21,6 +21,16 @@ const closeModal = () => {
   modalUid.value = null;
 };
 
+const updateRecentPosts = (postId: number) => {
+  const maxRecentPosts = 5;
+  const recentPosts = JSON.parse(localStorage.getItem('recentPosts') || '[]');
+  const updatedRecentPosts = [
+    postId,
+    ...recentPosts.filter((id: number) => id !== postId),
+  ].slice(0, maxRecentPosts);
+  localStorage.setItem('recentPosts', JSON.stringify(updatedRecentPosts));
+};
+
 const fetchUserData = async (userId: number) => {
   const res = await fetch(`https://koreanjson.com/users/${userId}`);
   return res.json();
@@ -36,6 +46,8 @@ onMounted(async () => {
         `https://koreanjson.com/posts/${postId}`,
       ).then((res) => res.json());
       post.value = postRes;
+
+      updateRecentPosts(Number(postId));
 
       if (postRes.UserId) {
         const postUserRes = await fetchUserData(postRes.UserId);
